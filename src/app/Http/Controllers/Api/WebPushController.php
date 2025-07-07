@@ -37,15 +37,15 @@ class WebPushController extends Controller
     public function index()
     {
         // $credentialsPath = config('firebase.projects.app.credentials');
-        $credentialsPath = __DIR__ . '/firebase/firebase_env.json';
+        // $credentialsPath = __DIR__ . '/firebase/firebase_env.json';
         $envCredentialsPath = env('FIREBASE_CREDENTIALS');
 
         return response()->json([
             'message' => 'WebPush API is working',
             'firebase_config' => [
-                'config_credentials_path' => $credentialsPath,
+                // 'config_credentials_path' => $credentialsPath,
                 'env_credentials_path' => $envCredentialsPath,
-                'config_exists' => $credentialsPath ? file_exists($credentialsPath) : false,
+                // 'config_exists' => $credentialsPath ? file_exists($credentialsPath) : false,
                 'env_exists' => $envCredentialsPath ? file_exists($envCredentialsPath) : false,
                 'messaging_initialized' => $this->messaging !== null,
             ]
