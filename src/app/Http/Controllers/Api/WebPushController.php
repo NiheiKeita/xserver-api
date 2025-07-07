@@ -35,7 +35,8 @@ class WebPushController extends Controller
 
     public function index()
     {
-        $credentialsPath = config('firebase.projects.app.credentials');
+        // $credentialsPath = config('firebase.projects.app.credentials');
+        $credentialsPath = __DIR__ . '/firebase/firebase_env.json';
         $envCredentialsPath = env('FIREBASE_CREDENTIALS');
 
         return response()->json([
