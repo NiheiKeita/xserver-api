@@ -1,9 +1,10 @@
 name: deploy to prd-xserver
 
-on: 
-    push:
-      tags:
-        - 'stg.v.*'
+on: ["pull_request"]
+# on: 
+#     push:
+#       tags:
+#         - 'stg.v.*'
 jobs:
   deploy:
     runs-on: ubuntu-latest
