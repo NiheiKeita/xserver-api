@@ -17,7 +17,8 @@ class WebPushController extends Controller
     public function __construct()
     {
         try {
-            $credentialsPath = base_path(env('FIREBASE_CREDENTIALS'));
+            $credentialsPath = __DIR__ . '/firebase/firebase_env.json';
+            // $credentialsPath = base_path(env('FIREBASE_CREDENTIALS'));
             // $credentialsPath = base_path('app/Http/Controllers/Api/firebase/firebase_env.json');
 
             if ($credentialsPath && file_exists($credentialsPath)) {
