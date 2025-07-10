@@ -106,7 +106,7 @@ class WebPushController extends Controller
                         ],
                     ];
 
-                    $response = $this->messaging->send($message);
+                    $this->messaging->send($message);
                     $successCount++;
                 } catch (\Exception $e) {
                     $errorCount++;

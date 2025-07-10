@@ -17,7 +17,7 @@ class RedirectAdminIfAuthenticated
      * @param  string|null  ...$guards
      * @return Response
      */
-    public function handle(Request $request, Closure $next, ...$guards): Response
+    public function handle(Request $request, Closure $next): Response
     {
         // 認証済みの場合はトップページにリダイレクト
         if (Auth::check()) {
