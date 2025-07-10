@@ -14,7 +14,6 @@ class RedirectAdminIfAuthenticated
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
-     * @param  string|null  ...$guards
      * @return Response
      */
     public function handle(Request $request, Closure $next): Response
