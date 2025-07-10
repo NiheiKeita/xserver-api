@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Kreait\Firebase\Messaging;
 use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Contract\Messaging as MessagingContract;
@@ -22,7 +21,7 @@ class WebPushController extends Controller
             $credentialsPath = config('firebase.credentials_path');
 
             if ($credentialsPath && is_string($credentialsPath) && file_exists($credentialsPath)) {
-                $this->messaging = (new Factory)
+                $this->messaging = (new Factory())
                     ->withServiceAccount($credentialsPath)
                     ->createMessaging();
             } else {
