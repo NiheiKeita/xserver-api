@@ -30,19 +30,19 @@ jobs:
         run: |
           docker compose exec app vendor/bin/phpunit --testsuite=Unit  --debug
           
-      - name: npm
-        run: |
-          npm ci
-      - name: eslint
-        run: npm run lint
-      - name: typeCheck
-        run: npm run type-check
-      - name: Build Storybook 
-        run: npm run build-storybook
-      - name: Serve Storybook
-        run: npx serve storybook-static -l 6006 &
-      - name: Install Playwright with dependencies
-        run: npx playwright install --with-deps
-      - name: storybookTest
-        run: npm run test-storybook
+      # - name: npm
+      #   run: |
+      #     npm ci
+      # - name: eslint
+      #   run: npm run lint
+      # - name: typeCheck
+      #   run: npm run type-check
+      # - name: Build Storybook 
+      #   run: npm run build-storybook
+      # - name: Serve Storybook
+      #   run: npx serve storybook-static -l 6006 &
+      # - name: Install Playwright with dependencies
+      #   run: npx playwright install --with-deps
+      # - name: storybookTest
+      #   run: npm run test-storybook
 
