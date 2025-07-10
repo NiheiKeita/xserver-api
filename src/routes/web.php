@@ -20,12 +20,3 @@ Route::post('/send-to-all', [WebPushController::class, 'sendToAll'])->withoutMid
 Route::post('/send-to-topic', [WebPushController::class, 'sendToTopic'])->withoutMiddleware(VerifyCsrfToken::class);
 Route::post('/send-to-token', [WebPushController::class, 'sendToToken'])->withoutMiddleware(VerifyCsrfToken::class);
 Route::post('/register-token', [WebPushController::class, 'registerToken'])->withoutMiddleware(VerifyCsrfToken::class);
-
-// Route::group(['middleware' => 'basicauth'], function () {
-//     // Webプッシュ通知API
-//     Route::prefix('webpush')->group(function () {
-//         Route::post('/send-to-all', [WebPushController::class, 'sendToAll']);
-//         Route::post('/send-to-topic', [WebPushController::class, 'sendToTopic']);
-//         Route::post('/send-to-token', [WebPushController::class, 'sendToToken']);
-//     });
-// });

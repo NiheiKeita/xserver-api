@@ -8,21 +8,20 @@ use Illuminate\Http\JsonResponse;
 use Kreait\Firebase\Messaging;
 use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Factory;
+use Kreait\Firebase\Contract\Messaging as MessagingContract;
 use App\Models\DeviceToken;
 
 class WebPushController extends Controller
 {
-    protected ?Messaging $messaging;
+    /** @var MessagingContract|null */
+    protected ?MessagingContract $messaging;
 
     public function __construct()
     {
         try {
-            // $credentialsPath = __DIR__ . '/firebase/firebase_env.json';
-            $credentialsPath = env('FIREBASE_CREDENTIALS');
-            // $credentialsPath = base_path(env('FIREBASE_CREDENTIALS'));
-            // $credentialsPath = base_path('app/Http/Controllers/Api/firebase/firebase_env.json');
+            $credentialsPath = config('firebase.credentials_path');
 
-            if ($credentialsPath && file_exists($credentialsPath)) {
+            if ($credentialsPath && is_string($credentialsPath) && file_exists($credentialsPath)) {
                 $this->messaging = (new Factory)
                     ->withServiceAccount($credentialsPath)
                     ->createMessaging();
@@ -34,19 +33,15 @@ class WebPushController extends Controller
         }
     }
 
-    public function index()
+    public function index(): JsonResponse
     {
-        // $credentialsPath = config('firebase.projects.app.credentials');
-        // $credentialsPath = __DIR__ . '/firebase/firebase_env.json';
-        $envCredentialsPath = env('FIREBASE_CREDENTIALS');
+        $envCredentialsPath = config('firebase.credentials_path');
 
         return response()->json([
             'message' => 'WebPush API is working',
             'firebase_config' => [
-                // 'config_credentials_path' => $credentialsPath,
                 'env_credentials_path' => $envCredentialsPath,
-                // 'config_exists' => $credentialsPath ? file_exists($credentialsPath) : false,
-                'env_exists' => $envCredentialsPath ? file_exists($envCredentialsPath) : false,
+                'env_exists' => $envCredentialsPath && is_string($envCredentialsPath) ? file_exists($envCredentialsPath) : false,
                 'messaging_initialized' => $this->messaging !== null,
             ]
         ]);
@@ -72,8 +67,7 @@ class WebPushController extends Controller
         }
 
         try {
-            // データベースから全デバイストークンを取得
-            $deviceTokens = DeviceToken::pluck('token')->toArray();
+            $deviceTokens = DeviceToken::query()->pluck('token')->toArray();
 
             if (empty($deviceTokens)) {
                 return response()->json([
@@ -92,11 +86,11 @@ class WebPushController extends Controller
                     $message = [
                         'token' => $token,
                         'notification' => [
-                            'title' => $request->title,
-                            'body' => $request->message,
+                            'title' => $request->input('title'),
+                            'body' => $request->input('message'),
                         ],
                         'data' => [
-                            'url' => $request->url ?? '',
+                            'url' => $request->input('url') ?? '',
                             'timestamp' => now()->toISOString(),
                         ],
                         'webpush' => [
@@ -104,11 +98,11 @@ class WebPushController extends Controller
                                 'Urgency' => 'high',
                             ],
                             'notification' => [
-                                'title' => $request->title,
-                                'body' => $request->message,
+                                'title' => $request->input('title'),
+                                'body' => $request->input('message'),
                                 'icon' => '/favicon.ico',
                                 'badge' => '/favicon.ico',
-                                'click_action' => $request->url ?? '/',
+                                'click_action' => $request->input('url') ?? '/',
                             ],
                         ],
                     ];
@@ -159,13 +153,13 @@ class WebPushController extends Controller
 
         try {
             $message = [
-                'topic' => $request->topic,
+                'topic' => $request->input('topic'),
                 'notification' => [
-                    'title' => $request->title,
-                    'body' => $request->message,
+                    'title' => $request->input('title'),
+                    'body' => $request->input('message'),
                 ],
                 'data' => [
-                    'url' => $request->url ?? '',
+                    'url' => $request->input('url') ?? '',
                     'timestamp' => now()->toISOString(),
                 ],
                 'webpush' => [
@@ -173,11 +167,11 @@ class WebPushController extends Controller
                         'Urgency' => 'high',
                     ],
                     'notification' => [
-                        'title' => $request->title,
-                        'body' => $request->message,
+                        'title' => $request->input('title'),
+                        'body' => $request->input('message'),
                         'icon' => '/favicon.ico',
                         'badge' => '/favicon.ico',
-                        'click_action' => $request->url ?? '/',
+                        'click_action' => $request->input('url') ?? '/',
                     ],
                 ],
             ];
@@ -220,13 +214,13 @@ class WebPushController extends Controller
 
         try {
             $message = [
-                'token' => $request->token,
+                'token' => $request->input('token'),
                 'notification' => [
-                    'title' => $request->title,
-                    'body' => $request->message,
+                    'title' => $request->input('title'),
+                    'body' => $request->input('message'),
                 ],
                 'data' => [
-                    'url' => $request->url ?? '',
+                    'url' => $request->input('url') ?? '',
                     'timestamp' => now()->toISOString(),
                 ],
                 'webpush' => [
@@ -234,11 +228,11 @@ class WebPushController extends Controller
                         'Urgency' => 'high',
                     ],
                     'notification' => [
-                        'title' => $request->title,
-                        'body' => $request->message,
+                        'title' => $request->input('title'),
+                        'body' => $request->input('message'),
                         'icon' => '/favicon.ico',
                         'badge' => '/favicon.ico',
-                        'click_action' => $request->url ?? '/',
+                        'click_action' => $request->input('url') ?? '/',
                     ],
                 ],
             ];
@@ -268,9 +262,8 @@ class WebPushController extends Controller
             'token' => 'required|string',
         ]);
 
-        // データベースに保存（重複は無視）
-        $token = $request->token;
-        $deviceToken = DeviceToken::firstOrCreate(['token' => $token]);
+        $token = $request->input('token');
+        $deviceToken = DeviceToken::query()->firstOrCreate(['token' => $token]);
 
         return response()->json([
             'success' => true,

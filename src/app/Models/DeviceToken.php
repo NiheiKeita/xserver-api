@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property string $token
+ */
 class DeviceToken extends Model
 {
-  use HasFactory;
 
-  protected $fillable = [
-    'token',
-  ];
+    protected $fillable = ['token'];
+
+    protected $table = 'device_tokens';
 }
