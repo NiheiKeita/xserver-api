@@ -111,6 +111,9 @@ class WebPushController extends Controller
                 } catch (\Exception $e) {
                     $errorCount++;
                     $errors[] = "Token {$token}: " . $e->getMessage();
+
+                    // 無効なトークンの場合はDBから削除
+                    DeviceToken::where('token', $token)->first()->delete();
                 }
             }
 
