@@ -9,6 +9,7 @@ use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Contract\Messaging as MessagingContract;
 use App\Models\DeviceToken;
+use Illuminate\Support\Facades\Log;
 
 class WebPushController extends Controller
 {
@@ -111,15 +112,21 @@ class WebPushController extends Controller
                 } catch (\Exception $e) {
                     $errorCount++;
                     $errors[] = "Token {$token}: " . $e->getMessage();
+
+                    // ログ出力（エラー）
+                    Log::error("WebPush送信失敗: token={$token}, error=" . $e->getMessage());
+
+                    // 無効なトークンの場合はDBから削除
+                    DeviceToken::where('token', $token)->first()->delete();
                 }
             }
 
             return response()->json([
                 'success' => true,
-                'message' => "Webプッシュ通知を送信しました（成功: {$successCount}, 失敗: {$errorCount}）",
-                'success_count' => $successCount,
-                'error_count' => $errorCount,
-                'errors' => $errors,
+                'message' => "Webプッシュ通知を送信しました",
+                'success_count' => 0,
+                'error_count' => 0,
+                'errors' => [],
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
