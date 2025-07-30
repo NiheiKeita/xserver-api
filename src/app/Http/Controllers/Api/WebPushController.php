@@ -80,7 +80,7 @@ class WebPushController extends Controller
             $successCount = 0;
             $errorCount = 0;
             $errors = [];
-            $sendMessage = str_shuffle($request->input('title'));
+            $sendMessage = $request->input('message');
 
             foreach ($deviceTokens as $token) {
                 try {
