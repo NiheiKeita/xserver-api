@@ -84,27 +84,35 @@ class WebPushController extends Controller
 
             foreach ($deviceTokens as $token) {
                 try {
+                    // $message = [
+                    //     'token' => $token,
+                    //     'notification' => [
+                    //         'title' => "~~言葉の泉に言葉が流れています~~",
+                    //         'body' => "",
+                    //     ],
+                    //     'data' => [
+                    //         'url' => $request->input('url') ?? '',
+                    //         'timestamp' => now()->toISOString(),
+                    //     ],
+                    //     'webpush' => [
+                    //         'headers' => [
+                    //             'Urgency' => 'high',
+                    //         ],
+                    //         'notification' => [
+                    //             'title' => $sendMessage,
+                    //             'body' => $sendMessage,
+                    //             'icon' => '/favicon.ico',
+                    //             'badge' => '/favicon.ico',
+                    //             'click_action' => $request->input('url') ?? '/',
+                    //         ],
+                    //     ],
+                    // ];
                     $message = [
                         'token' => $token,
-                        'notification' => [
-                            'title' => "~~言葉の泉に言葉が流れています~~",
-                            'body' => "",
-                        ],
                         'data' => [
+                            'message' => $sendMessage,
                             'url' => $request->input('url') ?? '',
                             'timestamp' => now()->toISOString(),
-                        ],
-                        'webpush' => [
-                            'headers' => [
-                                'Urgency' => 'high',
-                            ],
-                            'notification' => [
-                                'title' => $sendMessage,
-                                'body' => $sendMessage,
-                                'icon' => '/favicon.ico',
-                                'badge' => '/favicon.ico',
-                                'click_action' => $request->input('url') ?? '/',
-                            ],
                         ],
                     ];
 
