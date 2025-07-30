@@ -80,14 +80,14 @@ class WebPushController extends Controller
             $successCount = 0;
             $errorCount = 0;
             $errors = [];
-            $getMessage = str_shuffle($request->input('message'));
+            $sendMessage = str_shuffle($request->input('title'));
 
             foreach ($deviceTokens as $token) {
                 try {
                     $message = [
                         'token' => $token,
                         'notification' => [
-                            'title' => "〜〜言葉の泉に言葉が流れています〜〜",
+                            'title' => "~~言葉の泉に言葉が流れています~~",
                             'body' => "",
                         ],
                         'data' => [
@@ -99,8 +99,8 @@ class WebPushController extends Controller
                                 'Urgency' => 'high',
                             ],
                             'notification' => [
-                                'title' => "",
-                                'body' => $getMessage,
+                                'title' => $sendMessage,
+                                'body' => $sendMessage,
                                 'icon' => '/favicon.ico',
                                 'badge' => '/favicon.ico',
                                 'click_action' => $request->input('url') ?? '/',
@@ -157,14 +157,13 @@ class WebPushController extends Controller
                 'error' => 'Firebase messaging not initialized',
             ], 500);
         }
-        $getMessage = str_shuffle($request->input('message'));
 
         try {
             $message = [
                 'topic' => $request->input('topic'),
                 'notification' => [
-                    'title' => "〜〜言葉の泉に言葉が流れています〜〜",
-                    'body' => "",
+                    'title' => $request->input('title'),
+                    'body' => $request->input('message'),
                 ],
                 'data' => [
                     'url' => $request->input('url') ?? '',
@@ -175,8 +174,8 @@ class WebPushController extends Controller
                         'Urgency' => 'high',
                     ],
                     'notification' => [
-                        'title' => "",
-                        'body' => $getMessage,
+                        'title' => $request->input('title'),
+                        'body' => $request->input('message'),
                         'icon' => '/favicon.ico',
                         'badge' => '/favicon.ico',
                         'click_action' => $request->input('url') ?? '/',
@@ -219,14 +218,13 @@ class WebPushController extends Controller
                 'error' => 'Firebase messaging not initialized',
             ], 500);
         }
-        $getMessage = str_shuffle($request->input('message'));
 
         try {
             $message = [
                 'token' => $request->input('token'),
                 'notification' => [
-                    'title' => "〜〜言葉の泉に言葉が流れています〜〜",
-                    'body' => "",
+                    'title' => $request->input('title'),
+                    'body' => $request->input('message'),
                 ],
                 'data' => [
                     'url' => $request->input('url') ?? '',
@@ -237,8 +235,8 @@ class WebPushController extends Controller
                         'Urgency' => 'high',
                     ],
                     'notification' => [
-                        'title' => "",
-                        'body' => $getMessage,
+                        'title' => $request->input('title'),
+                        'body' => $request->input('message'),
                         'icon' => '/favicon.ico',
                         'badge' => '/favicon.ico',
                         'click_action' => $request->input('url') ?? '/',
